@@ -275,3 +275,34 @@ questions = [
         "Resposta": "Sena",
     },
 ]
+
+
+def show_question(idx_current_question, current_question):
+    print(f"Pergunta {idx_current_question + 1}: {current_question["Pergunta"]}")
+
+
+def show_option(current_question):
+    current_options = current_question["Opções"]
+    for idx_option, option in enumerate(current_options):
+        print(f"{idx_option + 1}) {option}")
+
+
+def get_answer(current_question):
+    user_choice = input("Digite a opção correta: ")
+    if user_choice.isdigit():
+        user_choice_value = current_question["Opções"][int(user_choice) - 1]
+        return user_choice_value
+    else:
+        return None
+
+
+def quiz(questions):
+    for idx_current_question, current_question in enumerate(questions):
+        show_question(idx_current_question, current_question)
+
+        show_option(current_question)
+
+        get_answer(current_question)
+
+
+quiz(questions)
