@@ -1,65 +1,87 @@
+import os
 import random
 
 
 def quiz(questions):
-    total_questions_int = number_of_questions()
-
+    total_questions_int = number_of_questions(questions)
     selected_questions = random_questions(total_questions_int, questions)
 
     correct_answers = 0
+    wrong_answers = 0
+    current_total_questions = 0
 
-    for idx_current_question, current_question in enumerate(selected_questions):
-        show_question(idx_current_question, current_question)
+    for index_current_question, current_question in enumerate(selected_questions):
+        show_question(index_current_question, current_question)
+
+        current_total_questions += 1
 
         show_options(current_question)
 
-        user_choice_value = get_answer(current_question)
+        user_choice = get_answer()
 
-        if validate_answer(user_choice_value, current_question):
+        is_correct = validate_answer(user_choice, current_question)
+        if is_correct:
             correct_answers += 1
+        else:
+            wrong_answers += 1
 
-    print(
-        f"\nVocê acertou {correct_answers} respostas de um total de {len(selected_questions)} possíveis"
+        sum_correct_answers(correct_answers, wrong_answers, current_total_questions)
+
+    final_message(correct_answers, wrong_answers, current_total_questions)
+
+
+def number_of_questions(questions):
+    possible_questions = len(questions)
+    number_of_questions = input(
+        f"Você pode escolher até {possible_questions}.\nDigite o número de perguntas que deseja: "
     )
-
-
-def number_of_questions():
-    total_questions = input("Digite o total de questões para serem respondidas: ")
-    total_questions_int = int(total_questions)
-    return total_questions_int
+    number_of_questions_int = int(number_of_questions)
+    return number_of_questions_int
 
 
 def random_questions(total_questions_int, questions):
-    random_questions = random.sample(questions, total_questions_int)
-    return random_questions
+    randomic_questions = random.sample(questions, total_questions_int)
+    return randomic_questions
 
 
-def show_question(idx_current_question, current_question):
-    print(f"\nPergunta {idx_current_question + 1}: {current_question["Pergunta"]}")
+def show_question(index_current_question, current_question):
+    print(f"\nPergunta {index_current_question + 1}: {current_question["Pergunta"]}")
 
 
 def show_options(current_question):
-    current_options = current_question["Opções"]
-    for idx_option, option in enumerate(current_options):
-        print(f"{idx_option + 1}) {option}")
+    for index_option, option in enumerate(current_question["Opções"]):
+        print(f"{index_option + 1}) {option}")
 
 
-def get_answer(current_question):
-    user_choice = input("Digite a opção correta: ")
-    if user_choice.isdigit():
-        user_choice_value = current_question["Opções"][int(user_choice) - 1]
-        return user_choice_value
-    else:
-        return None
+def get_answer():
+    selected_option = input("Digite a alternativa correta: ")
+    selected_option_int = int(selected_option)
+    return selected_option_int - 1
 
 
-def validate_answer(user_choice_value, current_question):
-    if user_choice_value == current_question["Resposta"]:
-        print("Reposta correta ✅")
+def validate_answer(user_choice, current_question):
+    user_choice_text = current_question["Opções"][user_choice]
+    if user_choice_text == current_question["Resposta"]:
+        print(f"\nResposta correta ✅")
         return True
     else:
-        print("Resposta incorreta ❌")
+        print(f"\nResposta incorreta ❌")
         return False
+
+
+def sum_correct_answers(correct_answers, wrong_answers, current_total_questions):
+    print(f"\n{correct_answers} ✅ \n{wrong_answers} ❌\n")
+
+
+def corrects_percentage(correct_answers, current_total_questions):
+    percentage_right = (correct_answers / current_total_questions) * 100
+    print(f"Porcentagem: {percentage_right:.2f}%")
+
+
+def final_message(correct_answers, wrong_answers, current_total_questions):
+    os.system("clear")
+    sum_correct_answers(correct_answers, wrong_answers, current_total_questions)
+    corrects_percentage(correct_answers, current_total_questions)
 
 
 questions = [
