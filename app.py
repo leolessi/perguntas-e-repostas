@@ -25,7 +25,6 @@ def quiz(questions):
 
 def number_of_questions():
     total_questions = input("Digite o total de questões para serem respondidas: ")
-    print()
     total_questions_int = int(total_questions)
     return total_questions_int
 
