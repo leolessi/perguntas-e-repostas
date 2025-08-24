@@ -1,4 +1,5 @@
 import os
+import time
 import random
 
 
@@ -40,8 +41,8 @@ def number_of_questions(questions):
 
 
 def random_questions(total_questions_int, questions):
-    randomic_questions = random.sample(questions, total_questions_int)
-    return randomic_questions
+    random.seed(time.time())
+    return random.sample(questions, total_questions_int)
 
 
 def show_question(index_current_question, current_question):
